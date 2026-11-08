@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "../lib/router.jsx";
 import { PROFILE } from "../data/profile.js";
 import { Arrow } from "./ui.jsx";
+import ThemeToggle from "./ThemeToggle.jsx";
 
 export const NAV = [
   { id: "research", label: "Research" },
@@ -48,16 +49,39 @@ export default function Nav({ path, section }) {
   const active = useActiveSection(isHome);
   const current = isHome ? active : section;
   const [scrolled, setScrolled] = useState(false);
+  // Tucks away while reading down the page, comes back on any scroll up.
+  const [tucked, setTucked] = useState(false);
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
   const toggleRef = useRef(null);
 
+  const progressRef = useRef(null);
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
+    let frame = 0;
+    let lastY = window.scrollY;
+    const update = () => {
+      frame = 0;
+      const y = window.scrollY;
+      setScrolled(y > 8);
+      if (Math.abs(y - lastY) > 6) {
+        setTucked(y > 320 && y > lastY);
+        lastY = y;
+      }
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (progressRef.current) progressRef.current.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [path]);
 
   useEffect(() => setOpen(false), [path]);
 
@@ -83,11 +107,17 @@ export default function Nav({ path, section }) {
 
   return (
     <>
-      <header className={`site-nav ${scrolled || !isHome ? "is-scrolled" : ""} ${open ? "is-open" : ""}`}>
+      <header
+        className={`site-nav ${scrolled || !isHome ? "is-scrolled" : ""} ${open ? "is-open" : ""} ${
+          tucked && !open ? "is-tucked" : ""
+        }`}
+        onFocus={() => setTucked(false)}
+      >
         <div className="site-nav__inner wrap">
           <Link to="/" className="wordmark" aria-label={`${PROFILE.name}, home`}>
+            <span className="wordmark__mark" aria-hidden="true">SP</span>
             <span className="wordmark__name">{PROFILE.name}</span>
-            <span className="wordmark__role">Biomedical Engineering</span>
+            <span className="wordmark__role">BME · University of Florida</span>
           </Link>
 
           <nav className="site-nav__links" aria-label="Primary">
@@ -106,6 +136,8 @@ export default function Nav({ path, section }) {
             </a>
           </nav>
 
+          <ThemeToggle />
+
           <button
             ref={toggleRef}
             type="button"
@@ -118,14 +150,20 @@ export default function Nav({ path, section }) {
             <span className="site-nav__toggle-icon" aria-hidden="true" />
           </button>
         </div>
+        <span className="site-nav__progress" ref={progressRef} aria-hidden="true" />
       </header>
 
-        <div id="mobile-menu" ref={menuRef} className="mobile-menu" hidden={!open}>
+      <div id="mobile-menu" ref={menuRef} className="mobile-menu" hidden={!open}>
           <nav aria-label="Primary mobile" className="wrap">
             <ol>
               {NAV.map((n, i) => (
                 <li key={n.id}>
-                  <Link to={n.to ?? `/#${n.id}`} onClick={() => setOpen(false)} aria-current={current === n.id ? "true" : undefined}>
+                  <Link
+                    to={n.to ?? `/#${n.id}`}
+                    onClick={() => setOpen(false)}
+                    aria-current={current === n.id ? "true" : undefined}
+                    style={{ "--i": i }}
+                  >
                     <span className="mobile-menu__num">{String(i + 1).padStart(2, "0")}</span>
                     {n.label}
                   </Link>

@@ -15,16 +15,30 @@ npm run dev
 ```
 src/
   data/        Content — edit these to update the site (profile, research, projects, publications, experience)
-  sections/    Homepage sections (Hero, Research, Projects, Publications, Experience, About, Contact)
+  sections/    Homepage sections (Hero, Now, Research, Projects, Publications, Experience, About, Contact)
   pages/       Home, case-study page (/work/:slug), 404
   components/  Nav, Footer, Reveal, figures, small UI primitives
   lib/         Minimal History-API router
   styles/      Design tokens and styles (tokens → base → components → sections → figures → case)
 ```
 
-- Research entries live in `src/data/work.js`. `tier: "featured"` gives a large row with a figure;
+- Research entries live in `src/data/work.js`. `tier: "featured"` gives a full plate with a figure;
   `caseStudy: true` generates a page at `/work/<slug>`.
-- Colors, type, and spacing are defined once in `src/styles/tokens.css`.
+- Design, wet lab, and modeling entries (also in `work.js`) and the smaller projects in
+  `src/data/projects.js` all feed the one filterable Projects index. Entries with a case study link to
+  it; the rest expand in place.
+- "Now" on the homepage lists `CURRENTLY` from `src/data/profile.js`.
+- Colors, type, and spacing are defined once in `src/styles/tokens.css`: bone paper, near-black ink, one
+  cobalt accent; Schibsted Grotesk for structure, Source Serif 4 for reading, DM Mono for annotation.
+- Motion: `src/lib/scroll.js` gives registered elements a `--p` custom property (0 → 1) that follows
+  the scroll both ways, and the scroll scenes in `src/styles/motion.css` are written against it.
+  `Reveal` entrances replay when content drops back below the fold. The intro screen
+  (`src/components/Loader.jsx`) runs once per session: a data cloud and model fit whose points
+  assemble into the hero name. The footer signature (`Signature.jsx`) reverses the idea on scroll.
+  Everything rests in its finished state under `prefers-reduced-motion`.
+- Themes: white (default) and black. Dark values live under `:root[data-theme="dark"]` in
+  `tokens.css`; `index.html` sets the theme before first paint (saved choice, else system setting),
+  and `ThemeToggle.jsx` switches it with a circular view transition.
 - `public/CV.pdf` is the downloadable CV and the factual source for site content.
 
 ## Writing a blog post
