@@ -1,6 +1,6 @@
 // After `vite build`: write a static HTML file for each project page so that
 // direct visits and shared links get the right title and description.
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from "node:fs";
 import { PAGES } from "../src/data/work.js";
 import { metaFor } from "../src/lib/meta.js";
 
@@ -17,4 +17,7 @@ for (const work of PAGES) {
   mkdirSync(`dist/work/${work.slug}`, { recursive: true });
   writeFileSync(`dist/work/${work.slug}/index.html`, html);
 }
+// Static hosts such as GitHub Pages serve 404.html for unknown paths; the app
+// then shows the right page (or its own "not found").
+copyFileSync("dist/index.html", "dist/404.html");
 console.log(`prerender: wrote ${PAGES.length} project pages`);
