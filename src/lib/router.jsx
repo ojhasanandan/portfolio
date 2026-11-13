@@ -3,8 +3,14 @@ import { createContext, useContext, useEffect, useState, useCallback } from "rea
 // A very small History-API router: paths for pages, hashes for sections,
 // and one query parameter (?for=) that carries the reading lens.
 const Ctx = createContext(null);
+
+// The folder the site is served from, without a trailing slash: "" or "/portfolio".
+export const BASE = import.meta.env.BASE_URL.replace(/\/+$/, "");
+export const asset = (p) => BASE + p;
+const strip = (p) => (BASE && p.startsWith(BASE) ? p.slice(BASE.length) : p);
+
 const read = () => ({
-  path: window.location.pathname.replace(/\/+$/, "") || "/",
+  path: strip(window.location.pathname).replace(/\/+$/, "") || "/",
   hash: window.location.hash.slice(1),
   lens: new URLSearchParams(window.location.search).get("for") || "all",
   key: Math.random(),
@@ -21,7 +27,7 @@ export function Router({ children }) {
   const withLens = useCallback(
     (to, lens = loc.lens) => {
       const [path, hash] = to.split("#");
-      return (path || "/") + (lens && lens !== "all" ? `?for=${lens}` : "") + (hash ? `#${hash}` : "");
+      return BASE + (path || "/") + (lens && lens !== "all" ? `?for=${lens}` : "") + (hash ? `#${hash}` : "");
     },
     [loc.lens],
   );
@@ -56,6 +62,7 @@ export function Link({ to, children, onClick, ...rest }) {
   const { loc, navigate, withLens } = useRouter();
   const external = /^(https?:|mailto:)/.test(to) || to.endsWith(".pdf");
   if (external) {
+    if (to.startsWith("/")) to = asset(to);
     const newTab = !to.startsWith("mailto:");
     return (
       <a href={to} {...(newTab ? { target: "_blank", rel: "noreferrer" } : {})} onClick={onClick} {...rest}>

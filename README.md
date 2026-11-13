@@ -55,6 +55,12 @@ Search the `src/data/` files for `TODO`:
 
 ## Deployment
 
-`vercel.json` is set up for Vercel: unknown paths fall back to `index.html`, and hashed assets are cached.
-Once the site has a domain, add `og:url` and a canonical link in `index.html` and make the `og:image`
+The site is published to GitHub Pages by `.github/workflows/deploy.yml` on every push to `master`.
+One-time setup: in the repository's **Settings → Pages**, set **Source** to **GitHub Actions**.
+
+The workflow builds with `BASE_PATH=/<repository name>/`, so the site works from
+`https://<user>.github.io/portfolio/`. On a custom domain or on Vercel, leave `BASE_PATH` unset and the
+site is served from `/`. `vercel.json` is kept for that case.
+
+Once the address is final, add `og:url` and a canonical link in `index.html` and make the `og:image`
 address absolute.
