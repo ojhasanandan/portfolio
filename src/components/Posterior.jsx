@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import { whenReady } from "../lib/motion.js";
 
 // A live ABC-SMC run on a toy problem: fit the growth rate r and carrying
 // capacity K of a logistic curve to noisy synthetic data. Everything drawn
@@ -233,13 +234,14 @@ export default function Posterior() {
   }, [show]);
 
   useEffect(() => {
-    start();
+    const off = whenReady(start);
     const redraw = () => show(state.current.gi);
     window.addEventListener("resize", redraw);
     const mo = new MutationObserver(redraw);
     mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     document.fonts?.ready.then(redraw);
     return () => {
+      off();
       window.removeEventListener("resize", redraw);
       mo.disconnect();
       cancelAnimationFrame(state.current.raf);

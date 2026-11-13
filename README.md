@@ -19,7 +19,7 @@ npm run dev
 ```
 src/
   data/        All content. Edit these files to update the site.
-    site.js      Name, contact links, education, hero facts, lenses, interests, trajectory
+    site.js      Name, contact links, education, interests, trajectory
     work.js      Research and projects (entries with `page: true` get a page at /work/<slug>)
     record.js    Publications, talks, posters, honors, training, skills, teaching, leadership
   pages/       Home, the project page, 404
@@ -32,17 +32,21 @@ public/        CV, favicon, link-preview image
 
 ## How the site is organized
 
-- **One identity, three lenses.** The "What brings you here?" bar lets a reader choose graduate research,
-  quantitative roles, or healthcare and clinical research. The choice filters the Research and Projects
-  sections and shows a short tailored summary. It is stored in the URL, so a tailored link can go in each
-  application: `/?for=phd`, `/?for=quant`, `/?for=health`.
-- **Featured work** has its own page with motivation, what was done, a plain-language explanation of the
-  method, and where the work was presented. Other entries expand in place.
+- **Everything is on one page**, in sections: About, Research, Projects, Record, Preparation, Teaching and
+  leadership, Contact. Featured work has its own page with motivation, what was done, a plain-language
+  explanation of the method, and where it was presented. Other entries expand in place.
+- **The opening sequence** (`Intro.jsx`) plays once per session: the strange attractor of a forced Duffing
+  oscillator assembles itself, then the page is revealed. Click or press a key to skip.
 - **The hero figure** runs a real ABC-SMC fit on synthetic data in the browser (`Posterior.jsx`). It is
   an illustration of the method, not research data.
+- **Motion** lives in `src/lib/motion.js`: smooth scrolling (Lenis) and scroll-linked scenes. A registered
+  element gets a `--p` custom property (0 → 1) that the CSS animates against: the hero name parting,
+  section titles rising, the About passage inking in word by word, the trajectory rail filling, the
+  methods ticker. Schematics draw themselves when first seen. All of it is off under
+  `prefers-reduced-motion`.
 - **Schematics** on the cards (`Schematic.jsx`) are diagrams of each idea. Replace them with real figures
   when available.
-- **Themes:** "board" (dark, default) and "paper" (light). Colors and fonts are defined once in
+- **Themes:** charcoal (dark, default) and paper (light). Colors and fonts are defined once in
   `src/styles/tokens.css`. Fraunces for headings, Instrument Sans for text, JetBrains Mono for data.
 
 ## Things to fill in
@@ -51,7 +55,7 @@ Search the `src/data/` files for `TODO`:
 
 - `PROFILE.linkedin` in `site.js` (the LinkedIn buttons appear once it is set).
 - `EDUCATION.coursework` in `site.js` (a "Selected coursework" block appears once it has entries).
-- `public/Sanandan_Ojha_CV.pdf` was converted from the Word file. Replace it with your own PDF export.
+- The Duffing oscillator entry in `work.js` is a short placeholder description. Add your own role and details.
 
 ## Deployment
 
