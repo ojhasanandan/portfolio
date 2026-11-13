@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { jumpTo } from "../lib/motion.js";
 import { Link } from "../lib/router.jsx";
 import { PROFILE } from "../data/site.js";
 import ThemeToggle from "./ThemeToggle.jsx";
@@ -16,11 +17,14 @@ export default function Nav({ page }) {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("");
   const [scrolled, setScrolled] = useState(false);
+  const bar = useRef(null);
 
   // Highlight the section being read, and add a rule once the page has moved.
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 12);
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.current?.style.setProperty("transform", `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`);
       if (page !== "home") return setActive("");
       let cur = "";
       for (const [id] of LINKS) {
@@ -43,7 +47,7 @@ export default function Nav({ page }) {
   return (
     <header className={`nav ${scrolled ? "is-scrolled" : ""} ${open ? "is-open" : ""}`}>
       <div className="nav__in">
-        <Link to="/" className="nav__name" onClick={() => { setOpen(false); if (page === "home") window.scrollTo({ top: 0, behavior: "smooth" }); }}>
+        <Link to="/" className="nav__name" onClick={() => { setOpen(false); if (page === "home") jumpTo(0); }}>
           Sanandan Ojha
         </Link>
         <nav id="site-nav" className="nav__links" aria-label="Sections">
@@ -61,6 +65,7 @@ export default function Nav({ page }) {
           {open ? "Close" : "Menu"}
         </button>
       </div>
+      <span className="nav__bar" ref={bar} aria-hidden="true" />
     </header>
   );
 }

@@ -9,14 +9,17 @@
       content="Sanandan Ojha studies mathematics and biomedical engineering at the University of Florida. Mathematical modeling, numerical methods and Bayesian inference, applied to biology and medicine."
     />
     <meta name="author" content="Sanandan Ojha" />
-    <meta name="theme-color" content="#0f1a17" />
+    <meta name="theme-color" content="#171718" />
     <meta name="color-scheme" content="dark light" />
     <script>
-      // Apply a saved theme before first paint. The default is the dark "board".
+      // Apply a saved theme before first paint (the default is dark), and decide
+      // whether the opening sequence plays: once per session, never under reduced motion.
       (function () {
         try {
           var t = localStorage.getItem("so-theme");
           if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+          if (!sessionStorage.getItem("so-intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches)
+            document.documentElement.classList.add("intro");
         } catch (e) {}
       })();
     </script>
@@ -40,7 +43,7 @@
   <body>
     <div id="root"></div>
     <noscript>
-      <div style="max-width: 40rem; margin: 0 auto; padding: 2rem; font-family: Georgia, serif; line-height: 1.55; color: #e9e6da">
+      <div style="max-width: 40rem; margin: 0 auto; padding: 2rem; font-family: Georgia, serif; line-height: 1.55; color: #ecebe6">
         <h1>Sanandan Ojha</h1>
         <p>
           Mathematics and biomedical engineering at the University of Florida, with a minor in statistics. I build

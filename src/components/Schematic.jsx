@@ -1,3 +1,6 @@
+import { useEffect, useRef } from "react";
+import { reduced } from "../lib/motion.js";
+
 // Small hand-drawn schematics, one per featured piece of work. They illustrate
 // the idea of each method. They are diagrams, not results.
 const range = (n) => Array.from({ length: n }, (_, i) => i);
@@ -126,9 +129,36 @@ const FIGS = {
 
 export default function Schematic({ name, label }) {
   const Fig = FIGS[name];
+  const ref = useRef(null);
+  // The first time it is seen, each stroke draws itself.
+  useEffect(() => {
+    const svg = ref.current;
+    if (!svg || reduced() || !("IntersectionObserver" in window)) return;
+    const lines = [...svg.querySelectorAll(".s-line, .s-accent")];
+    lines.forEach((el) => {
+      const len = el.getTotalLength?.() || 0;
+      el.style.strokeDasharray = len;
+      el.style.strokeDashoffset = len;
+    });
+    svg.classList.add("is-armed");
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        io.disconnect();
+        svg.classList.add("is-drawn");
+        lines.forEach((el, i) => {
+          el.style.transition = `stroke-dashoffset 1.3s cubic-bezier(0.2,0.7,0.2,1) ${Math.min(i * 35, 500)}ms`;
+          el.style.strokeDashoffset = 0;
+        });
+      },
+      { threshold: 0.35 },
+    );
+    io.observe(svg);
+    return () => io.disconnect();
+  }, []);
   if (!Fig) return null;
   return (
-    <svg className="schem" viewBox="0 0 320 150" role="img" aria-label={label || "Schematic"}>
+    <svg ref={ref} className="schem" viewBox="0 0 320 150" role="img" aria-label={label || "Schematic"}>
       <Fig />
     </svg>
   );

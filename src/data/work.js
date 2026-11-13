@@ -1,14 +1,13 @@
 // Research and projects. Source: the CV. Entries with `page: true` get a full
 // page at /work/<slug>; the rest open in place on the home page.
 //
-// `lens` says which audiences an entry speaks to: "phd", "quant", "health".
 // `explainer` paragraphs describe a general method, not results of this work.
 
 export const THREADS = [
   { id: "inference", section: "research", title: "Mathematical biology & inference", blurb: "Mechanistic models of cells, tissues and disease, and the statistics of fitting them." },
   { id: "numerics", section: "research", title: "Numerical methods & scientific computing", blurb: "Writing and improving the solvers that the models depend on." },
   { id: "clinic", section: "research", title: "Medicine, imaging & clinical evidence", blurb: "Research done with clinicians, about patients and the people who treat them." },
-  { id: "stochastic", section: "projects", title: "Stochastic models & data analysis", blurb: "Modeling contests and independent analyses, most of them on a short clock." },
+  { id: "stochastic", section: "projects", title: "Modeling contests & data analysis", blurb: "Open-ended problems and independent analyses, most of them on a short clock." },
   { id: "design", section: "projects", title: "Engineering design", blurb: "Things designed, prototyped and handed to a user." },
 ];
 
@@ -19,7 +18,6 @@ export const WORK = [
     thread: "inference",
     page: true,
     figure: "layers",
-    lens: ["phd", "quant"],
     title: "Which model of collective cell migration do the data support?",
     short: "Two-layer cell migration model",
     where: "UF Mathematics · Mathematical biology",
@@ -49,19 +47,17 @@ export const WORK = [
   {
     slug: "honors-thesis",
     thread: "inference",
-    lens: ["phd", "health"],
-    title: "Honors thesis: estimating liver clearance from microcirculatory stress profiles",
+    title: "Honors thesis: estimating liver clearance from capillary shear stress",
     where: "UF · Honors thesis",
-    advisor: "Dr. Tracy Stepien and Dr. Murfee",
+    advisor: "Dr. Tracy Stepien, Dr. Murfee and Dr. Mancy",
     period: "August 2026 – present",
     summary:
-      "Using stress profiles from microcirculatory slides to estimate clearance in the liver. Work in progress.",
-    tools: ["Mathematical modeling", "Microcirculation"],
+      "Extending a circulatory system code base to handle multiple inlets and outlets, in order to compute shear stress in capillaries, then using the shear stress data to estimate hepatic clearance under different scenarios.",
+    tools: ["Mathematical modeling", "Microcirculation", "Shear stress"],
   },
   {
     slug: "lung-transplant",
     thread: "inference",
-    lens: ["health", "phd"],
     title: "A mechanistic model of primary graft dysfunction after lung transplant",
     where: "UF · Systems medicine",
     advisor: "Dr. Brunson",
@@ -73,7 +69,6 @@ export const WORK = [
   {
     slug: "covid-florida",
     thread: "inference",
-    lens: ["quant", "health", "phd"],
     title: "Early COVID-19 in Florida: an epidemic model with an economy in it",
     where: "Infectious Diseases and Economic Growth Workshop, UF",
     period: "March 2026",
@@ -84,7 +79,6 @@ export const WORK = [
   {
     slug: "igem-sepsis",
     thread: "inference",
-    lens: ["health", "phd"],
     title: "From differential equations to agents: sepsis in bone marrow",
     where: "UF iGEM · Gold medal, 2024 Grand Jamboree",
     advisor: "Dr. Pan",
@@ -96,12 +90,11 @@ export const WORK = [
   {
     slug: "restenosis",
     thread: "inference",
-    lens: ["health", "phd"],
     title: "Restenosis in self-expanding stents",
     where: "Quantitative Physiology (BME 4409) · course project",
-    period: "August 2026 – present",
+    period: "August – December 2026",
     summary:
-      "Adapting a restenosis model built for coronary stents to self-expanding nitinol stents in the leg. The problem is simplified to 2D, with a constant outward pressure that induces stress in the femoral artery wall.",
+      "Adapting a restenosis model built for coronary stents to self-expanding nitinol stents in the leg. The model is simplified to 2D by applying a constant outward pressure to represent the load on the femoral artery.",
     tools: ["Mechanobiology", "PDE modeling"],
   },
 
@@ -111,7 +104,6 @@ export const WORK = [
     thread: "numerics",
     page: true,
     figure: "lattice",
-    lens: ["phd", "quant"],
     title: "A faster lattice Boltzmann–immersed boundary method for migrating cells",
     short: "Lattice Boltzmann–immersed boundary method",
     where: "Indiana University Indianapolis · Research Experience for Undergraduates",
@@ -147,7 +139,6 @@ export const WORK = [
     thread: "numerics",
     page: true,
     figure: "slab",
-    lens: ["phd", "quant"],
     title: "A solver for the radiation transport equation, built in two weeks",
     short: "Radiation transport solver",
     where: "Texas A&M · Summer school on Modeling and Simulating with PDEs",
@@ -168,7 +159,7 @@ export const WORK = [
     },
     outputs: [
       { kind: "Talk", text: "S. Ojha, R. Dadlani, R. Divan, G. Ratcliff. Radiation Transport Equation. TAMU Undergraduate Summer School in Modeling and Simulating with PDEs, College Station, May 2026." },
-      { kind: "Poster", text: "S. Ojha, R. Dadlani, R. Divan. Radiation Transport Equation. November 2026." },
+      { kind: "Poster", text: "S. Ojha, R. Dadlani, R. Divan, G. Ratcliff. Radiation Transport Equation. UIC Undergraduate Mathematics Symposium, Chicago, November 2026." },
     ],
     status: "Complete.",
     tools: ["Finite element method", "SUPG stabilization", "Richardson iteration", "Boltzmann transport"],
@@ -180,7 +171,6 @@ export const WORK = [
     thread: "clinic",
     page: true,
     figure: "target",
-    lens: ["health"],
     title: "Does the scan predict the outcome? Imaging evidence in theranostics",
     short: "Nuclear medicine and theranostics",
     where: "University of Pittsburgh Radiology · Florida Theragnostic Center",
@@ -208,7 +198,6 @@ export const WORK = [
     thread: "clinic",
     page: true,
     figure: "denoise",
-    lens: ["health", "quant"],
     title: "Generating an MRI for patients who cannot have one",
     short: "Synthetic MRI from CT",
     where: "UF Dream Team Engineering",
@@ -238,7 +227,6 @@ export const WORK = [
     thread: "clinic",
     page: true,
     figure: "probe",
-    lens: ["health"],
     title: "Do simple surgical simulators teach? Designing the studies to find out",
     short: "Surgical simulator studies",
     where: "UF Dream Team Engineering",
@@ -263,7 +251,6 @@ export const WORK = [
   {
     slug: "igem-binder",
     thread: "clinic",
-    lens: ["health", "quant"],
     title: "Designing a protein binder for osteocalcin with AI",
     where: "UF iGEM · Silver medal, 2025 Grand Jamboree",
     advisor: "Dr. Pan",
@@ -275,7 +262,6 @@ export const WORK = [
   {
     slug: "berlin-heart",
     thread: "clinic",
-    lens: ["health"],
     title: "3D-printed heart device models for pediatric patient education",
     where: "UF Dream Team Engineering",
     advisor: "Dr. Chandran",
@@ -287,7 +273,6 @@ export const WORK = [
   {
     slug: "dna-repair",
     thread: "clinic",
-    lens: ["health"],
     title: "Purifying and characterizing human DNA repair proteins",
     where: "UF Biochemistry",
     advisor: "Dr. Caglayan",
@@ -303,7 +288,6 @@ export const WORK = [
     thread: "stochastic",
     page: true,
     figure: "chain",
-    lens: ["quant", "phd"],
     title: "An AI ouroboros: modeling what happens when models train on their own output",
     short: "AI model collapse as a Markov chain",
     where: "SCUDEM X 2025 · Problem B · Outstanding",
@@ -330,9 +314,18 @@ export const WORK = [
     tools: ["Markov chains", "Discrete probability distributions"],
   },
   {
+    slug: "scudem-prosthetics",
+    thread: "stochastic",
+    title: "Pediatric prosthetics: a model that grows with the patient",
+    where: "SCUDEM XI 2026 · Problem A · awaiting judging",
+    period: "October 16 – November 10, 2026",
+    summary:
+      "Constructed a 2D quasi-static model of patient growth and motion paths using inverse kinematics and forces, and presented the results in a ten-minute video. Judging is under way.",
+    tools: ["Inverse kinematics", "Quasi-static modeling", "Differential equations"],
+  },
+  {
     slug: "mcm",
     thread: "stochastic",
-    lens: ["quant", "phd"],
     title: "Three years of the Mathematical Contest in Modeling",
     where: "COMAP MCM/ICM · Successful Participant 2024, 2025, 2026",
     period: "2024 – 2026",
@@ -348,7 +341,6 @@ export const WORK = [
   {
     slug: "gymnastics",
     thread: "stochastic",
-    lens: ["quant"],
     title: "Picking an Olympic gymnastics team from the data",
     where: "UCSAS USOPC Data Challenge",
     period: "November 2023 – January 2024",
@@ -359,7 +351,6 @@ export const WORK = [
   {
     slug: "bias-detection",
     thread: "stochastic",
-    lens: ["quant"],
     title: "Looking for reviewer bias in eight cycles of applications",
     where: "Dream Team Engineering",
     period: "August – September 2025",
@@ -370,7 +361,6 @@ export const WORK = [
   {
     slug: "auto-sorter",
     thread: "stochastic",
-    lens: ["quant"],
     title: "A grading auto-sorter for a physiology course",
     where: "PCB 3713C teaching team",
     period: "September – October 2025",
@@ -381,20 +371,28 @@ export const WORK = [
 
   // ───────────────────────── Engineering design
   {
+    slug: "duffing",
+    thread: "design",
+    title: "A tabletop Duffing oscillator for teaching chaos",
+    where: "Team project · teaching demo for Dynamical Systems and Chaos (MAP 4314)",
+    period: "Fall 2026 – present",
+    summary:
+      "Working with a team on a classroom demonstration of the forced Duffing oscillator, the equation whose strange attractor draws itself when this site first loads. The aim is a device an instructor can put on a table to show bifurcations and chaos, with live measurements plotted against the numerical solution.",
+    tools: ["Nonlinear dynamics", "Duffing equation", "Hardware prototyping"],
+  },
+  {
     slug: "conmed",
     thread: "design",
-    lens: ["health"],
     title: "Senior design: a distal biceps tendon repair system for CONMED",
     where: "UF Biomedical Engineering · Industry-sponsored",
     period: "August 2026 – present",
     summary:
-      "Designing a proof-of-concept distal biceps tendon repair system for our industry sponsor, CONMED, with a team of eight senior engineering students. The system includes the implant, instruments and sterile packaging, and is evaluated by a sports medicine surgeon.",
+      "Designing a proof-of-concept distal biceps tendon repair system for our industry sponsor, CONMED, with a team of eight senior engineering students. The system includes the implant, instruments and sterile packaging, and a sports medicine surgeon will evaluate the design.",
     tools: ["Medical device design", "Team of eight"],
   },
   {
     slug: "walker",
     thread: "design",
-    lens: ["health"],
     title: "A piston-powered walker for stairs and seating",
     where: "Dream Team Engineering Designathon",
     period: "November 2025",
@@ -405,18 +403,16 @@ export const WORK = [
   {
     slug: "prescription-puzzles",
     thread: "design",
-    lens: ["health"],
     title: "Prescription Puzzles: a pill dispenser unlocked by a jigsaw",
     where: "Dream Team Engineering Designathon",
     period: "October 2023",
     summary:
-      "A low-cost pill dispenser run by a single Arduino and activated by completing a jigsaw puzzle. We built physical prototypes.",
+      "A low-cost pill dispenser run by a single Arduino and activated by completing a jigsaw puzzle.",
     tools: ["Arduino", "Prototyping"],
   },
   {
     slug: "hydraulic-crane",
     thread: "design",
-    lens: [],
     title: "Hydraulic cranes for middle schoolers",
     where: "Herbert Wertheim College of Engineering Outreach Design Competition",
     period: "February 2026",

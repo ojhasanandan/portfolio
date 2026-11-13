@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { glideTo, jumpTo } from "./motion.js";
 
-// A very small History-API router: paths for pages, hashes for sections,
-// and one query parameter (?for=) that carries the reading lens.
+// A very small History-API router: paths for pages, hashes for sections.
 const Ctx = createContext(null);
 
 // The folder the site is served from, without a trailing slash: "" or "/portfolio".
@@ -12,7 +12,6 @@ const strip = (p) => (BASE && p.startsWith(BASE) ? p.slice(BASE.length) : p);
 const read = () => ({
   path: strip(window.location.pathname).replace(/\/+$/, "") || "/",
   hash: window.location.hash.slice(1),
-  lens: new URLSearchParams(window.location.search).get("for") || "all",
   key: Math.random(),
 });
 
@@ -23,28 +22,11 @@ export function Router({ children }) {
     window.addEventListener("popstate", on);
     return () => window.removeEventListener("popstate", on);
   }, []);
-
-  const withLens = useCallback(
-    (to, lens = loc.lens) => {
-      const [path, hash] = to.split("#");
-      return BASE + (path || "/") + (lens && lens !== "all" ? `?for=${lens}` : "") + (hash ? `#${hash}` : "");
-    },
-    [loc.lens],
-  );
-  const navigate = useCallback(
-    (to) => {
-      window.history.pushState({}, "", withLens(to));
-      setLoc(read());
-    },
-    [withLens],
-  );
-  const setLens = useCallback((lens) => {
-    const url = window.location.pathname + (lens !== "all" ? `?for=${lens}` : "") + window.location.hash;
-    window.history.replaceState({}, "", url);
-    setLoc((l) => ({ ...l, lens }));
+  const navigate = useCallback((to) => {
+    window.history.pushState({}, "", BASE + to);
+    setLoc(read());
   }, []);
-
-  return <Ctx.Provider value={{ loc, navigate, setLens, withLens }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ loc, navigate }}>{children}</Ctx.Provider>;
 }
 
 export const useRouter = () => useContext(Ctx);
@@ -52,20 +34,19 @@ export const useRouter = () => useContext(Ctx);
 export function scrollToId(id, smooth = true) {
   const el = document.getElementById(id);
   if (!el) return false;
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  el.scrollIntoView({ behavior: smooth && !reduce ? "smooth" : "auto", block: "start" });
+  smooth ? glideTo(el) : jumpTo(el);
   return true;
 }
 
-// Internal link. Keeps the lens in the URL and scrolls to hashes without a reload.
+// Internal link. Scrolls to hashes on the current page without a reload.
 export function Link({ to, children, onClick, ...rest }) {
-  const { loc, navigate, withLens } = useRouter();
+  const { loc, navigate } = useRouter();
   const external = /^(https?:|mailto:)/.test(to) || to.endsWith(".pdf");
   if (external) {
-    if (to.startsWith("/")) to = asset(to);
+    const href = to.startsWith("/") ? asset(to) : to;
     const newTab = !to.startsWith("mailto:");
     return (
-      <a href={to} {...(newTab ? { target: "_blank", rel: "noreferrer" } : {})} onClick={onClick} {...rest}>
+      <a href={href} {...(newTab ? { target: "_blank", rel: "noreferrer" } : {})} onClick={onClick} {...rest}>
         {children}
       </a>
     );
@@ -76,12 +57,12 @@ export function Link({ to, children, onClick, ...rest }) {
     e.preventDefault();
     const [path, hash] = to.split("#");
     if ((path || "/") === loc.path && hash) {
-      window.history.pushState({}, "", withLens(to));
+      window.history.pushState({}, "", BASE + to);
       scrollToId(hash);
     } else navigate(to);
   };
   return (
-    <a href={withLens(to)} onClick={click} {...rest}>
+    <a href={BASE + to} onClick={click} {...rest}>
       {children}
     </a>
   );

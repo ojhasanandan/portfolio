@@ -1,99 +1,69 @@
-import { Link, useRouter } from "../lib/router.jsx";
-import { PROFILE, EDUCATION, FACTS, LENSES, INTERESTS, TRAJECTORY } from "../data/site.js";
+import { Link } from "../lib/router.jsx";
+import { useProgress } from "../lib/motion.js";
+import { PROFILE, EDUCATION, INTERESTS, TRAJECTORY } from "../data/site.js";
 import { WORK, THREADS } from "../data/work.js";
 import { PUBLICATIONS, TALKS, POSTERS, HONORS, TRAINING, SKILLS, TEACHING, LEADERSHIP, OUTREACH, CLINICAL } from "../data/record.js";
 import Posterior from "../components/Posterior.jsx";
 import Schematic from "../components/Schematic.jsx";
 import Reveal from "../components/Reveal.jsx";
+import { CountUp, Magnetic, Ink, Ticker } from "../components/Bits.jsx";
 
+// Section heading. The title glides in as it rises up the screen.
 function Head({ n, id, title, children }) {
+  const ref = useProgress("enter");
   return (
-    <Reveal as="header" className="head">
+    <header className="head" ref={ref}>
       <p className="head__n">§ {n}</p>
       <h2 id={`${id}-title`}>{title}</h2>
       {children && <p className="head__lede">{children}</p>}
-    </Reveal>
+    </header>
   );
 }
 
-function LensChips({ compact = false }) {
-  const { loc, setLens } = useRouter();
-  const all = [{ id: "all", label: "Everything" }, ...LENSES];
-  return (
-    <div className={`chips ${compact ? "chips--compact" : ""}`} role="group" aria-label="Choose what to emphasize">
-      {all.map((l) => (
-        <button key={l.id} type="button" className="chip" aria-pressed={loc.lens === l.id} onClick={() => setLens(l.id)}>
-          {l.label}
-        </button>
-      ))}
-    </div>
-  );
-}
+const [FIRST, ...LAST] = PROFILE.name.split(" ");
+const FACTS = [
+  { label: "University", value: EDUCATION.school, note: EDUCATION.location },
+  { label: "Degree", value: "Mathematics & Biomedical Engineering", note: "Dual B.S. · Minor in Statistics" },
+  { label: "GPA", value: EDUCATION.gpa, note: "Out of 4.00", numeric: true },
+  { label: "Graduation", value: EDUCATION.graduation, note: "Expected" },
+];
 
 function Hero() {
+  // As the hero scrolls away, the name drifts apart and the figure lags behind.
+  const scene = useProgress("exit");
   return (
-    <section className="hero">
+    <section className="hero" ref={scene}>
       <div className="wrap hero__grid">
         <div className="hero__text">
-          <p className="eyebrow">Mathematics · Biomedical Engineering · Statistics</p>
-          <h1>{PROFILE.name}</h1>
-          <p className="hero__statement">{PROFILE.statement}</p>
-          <p className="hero__lead">{PROFILE.lead}</p>
-          <div className="hero__cta">
-            <Link to="/#research" className="btn btn--solid">See the research</Link>
-            <Link to={PROFILE.cv} className="btn">Download CV <span aria-hidden="true">↓</span></Link>
+          <p className="eyebrow rise" style={{ "--i": 0 }}>Mathematics · Biomedical Engineering · Statistics</p>
+          <h1 aria-label={PROFILE.name}>
+            <span className="hero__line"><span className="mask" style={{ "--i": 1 }}>{FIRST}</span></span>{" "}
+            <span className="hero__line"><span className="mask" style={{ "--i": 2 }}>{LAST.join(" ")}</span></span>
+          </h1>
+          <p className="hero__statement rise" style={{ "--i": 4 }}>{PROFILE.statement}</p>
+          <p className="hero__lead rise" style={{ "--i": 5 }}>{PROFILE.lead}</p>
+          <div className="hero__cta rise" style={{ "--i": 6 }}>
+            <Magnetic><Link to="/#research" className="btn btn--solid">See the research</Link></Magnetic>
+            <Magnetic><Link to={PROFILE.cv} className="btn">Download CV <span aria-hidden="true">↓</span></Link></Magnetic>
             <Link to={`mailto:${PROFILE.email}`} className="btn btn--text">Get in touch</Link>
           </div>
         </div>
-        <Posterior />
+        <div className="hero__fig rise" style={{ "--i": 5 }}>
+          <Posterior />
+        </div>
       </div>
       <div className="wrap">
-        <dl className="facts">
+        <dl className="facts rise" style={{ "--i": 8 }} aria-label="Education">
           {FACTS.map((f) => (
             <div key={f.label}>
-              <dt>{f.value}</dt>
-              <dd>{f.label}</dd>
+              <dt>{f.label}</dt>
+              <dd>
+                <span className="facts__value">{f.numeric ? <CountUp value={Number(f.value)} /> : f.value}</span>
+                <span className="facts__note">{f.note}</span>
+              </dd>
             </div>
           ))}
         </dl>
-      </div>
-    </section>
-  );
-}
-
-function Lens() {
-  const { loc } = useRouter();
-  const lens = LENSES.find((l) => l.id === loc.lens);
-  return (
-    <section className="lens" id="lens" aria-labelledby="lens-title">
-      <div className="wrap">
-        <div className="lens__bar">
-          <h2 id="lens-title">What brings you here?</h2>
-          <LensChips />
-        </div>
-        {lens ? (
-          <div className="lens__panel" key={lens.id}>
-            <div>
-              <p className="eyebrow">{lens.audience}</p>
-              <p className="lens__pitch">{lens.pitch}</p>
-            </div>
-            <ol className="lens__points">
-              {lens.points.map((p) => (
-                <li key={p.head}>
-                  <Link to={p.href}>
-                    <b>{p.head}</b>
-                    <span>{p.text}</span>
-                  </Link>
-                </li>
-              ))}
-            </ol>
-          </div>
-        ) : (
-          <p className="lens__hint">
-            The same work reads differently to a PhD committee, a quantitative team and a clinical research group. Pick
-            one and the page brings forward what matters to you. Nothing is hidden for good.
-          </p>
-        )}
       </div>
     </section>
   );
@@ -107,10 +77,15 @@ const STEPS = [
 ];
 
 function About() {
+  const rail = useProgress("read");
   return (
     <section className="sec" id="about" aria-labelledby="about-title">
       <div className="wrap">
         <Head n="1" id="about" title="From the clinic to the equations" />
+        <Ink
+          className="about__ink"
+          text="Most of what I do follows one pattern, whether the subject is embryonic tissue, a transplanted lung or an AI trained on its own output: write the model, solve it, fit it to data, and ask what the answer changes."
+        />
         <div className="about">
           <Reveal className="prose">
             <p>
@@ -125,10 +100,6 @@ function About() {
               surgical training models, generating MRI from CT. The mathematics gave me the language underneath it:
               continuum mechanics, partial differential equations, Markov chains, Bayesian computation.
             </p>
-            <p>
-              Most of what I do now follows one pattern, whether the subject is embryonic tissue, a transplanted lung
-              or an AI trained on its own output.
-            </p>
           </Reveal>
           <Reveal as="ol" className="steps">
             {STEPS.map((s) => (
@@ -141,15 +112,15 @@ function About() {
           </Reveal>
         </div>
 
-        <Reveal as="ol" className="path" aria-label="Trajectory">
-          {TRAJECTORY.map((t) => (
-            <li key={t.when}>
+        <ol className="path" aria-label="Trajectory" ref={rail}>
+          {TRAJECTORY.map((t, i) => (
+            <li key={t.when} style={{ "--i": i }}>
               <span className="path__when">{t.when}</span>
               <h3>{t.title}</h3>
               <p>{t.text}</p>
             </li>
           ))}
-        </Reveal>
+        </ol>
 
         <div className="interests">
           <Reveal className="interests__intro">
@@ -174,9 +145,9 @@ function About() {
   );
 }
 
-function Feature({ w }) {
+function Feature({ w, delay }) {
   return (
-    <Reveal as="article" className="card">
+    <Reveal as="article" className="card" delay={delay}>
       <Link to={`/work/${w.slug}`} className="card__link" aria-label={w.title}>
         <div className="card__fig">
           <Schematic name={w.figure} label={`Schematic for ${w.short}`} />
@@ -224,32 +195,13 @@ function Row({ w }) {
 }
 
 function WorkSection({ n, id, title, lede }) {
-  const { loc, setLens } = useRouter();
-  const lens = LENSES.find((l) => l.id === loc.lens);
   const threads = THREADS.filter((t) => t.section === id);
-  const inSection = WORK.filter((w) => threads.some((t) => t.id === w.thread));
-  const match = (w) => !lens || w.lens.includes(lens.id);
-  const shown = inSection.filter(match);
   return (
     <section className="sec" id={id} aria-labelledby={`${id}-title`}>
       <div className="wrap">
         <Head n={n} id={id} title={title}>{lede}</Head>
-        <div className="filter">
-          <LensChips compact />
-          <p aria-live="polite">
-            {lens ? (
-              <>
-                Showing {shown.length} of {inSection.length} for {lens.label.toLowerCase()}.{" "}
-                <button type="button" className="linkish" onClick={() => setLens("all")}>Show everything</button>
-              </>
-            ) : (
-              <>{inSection.length} entries. Featured work opens a full page; the rest expand in place.</>
-            )}
-          </p>
-        </div>
         {threads.map((t) => {
-          const items = shown.filter((w) => w.thread === t.id);
-          if (!items.length) return null;
+          const items = WORK.filter((w) => w.thread === t.id);
           const feats = items.filter((w) => w.page);
           const rows = items.filter((w) => !w.page);
           return (
@@ -260,7 +212,7 @@ function WorkSection({ n, id, title, lede }) {
               </Reveal>
               {feats.length > 0 && (
                 <div className={`cards cards--${Math.min(feats.length, 3)}`}>
-                  {feats.map((w) => <Feature key={w.slug} w={w} />)}
+                  {feats.map((w, k) => <Feature key={w.slug} w={w} delay={k * 90} />)}
                 </div>
               )}
               {rows.length > 0 && (
@@ -322,8 +274,7 @@ function Record() {
           <Reveal>
             <h3>Talks <span className="count">{TALKS.length}</span></h3>
             <ul className="cites">{TALKS.map((c) => <Cite key={c.title + c.date} c={c} />)}</ul>
-            <p className="note">Next: a Directed Reading Program presentation at UF Mathematics, late November 2026.</p>
-          </Reveal>
+                      </Reveal>
           <Reveal>
             <h3>Posters <span className="count">{POSTERS.length}</span></h3>
             <ul className="cites">{POSTERS.map((c) => <Cite key={c.venue + c.title} c={c} />)}</ul>
@@ -460,10 +411,10 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <Lens />
       <About />
       <WorkSection n="2" id="research" title="Research" lede="Three threads, one habit: build the model, then make it answer to evidence." />
       <WorkSection n="3" id="projects" title="Projects" lede="Modeling contests, independent analyses and design work done alongside the research." />
+      <Ticker rows={[SKILLS[0].items, [...SKILLS[1].items, ...SKILLS[2].items]]} />
       <Record />
       <Preparation />
       <Beyond />

@@ -24,6 +24,7 @@ export const PUBLICATIONS = [
 ];
 
 export const TALKS = [
+  { date: "Nov 2026", authors: "S. Ojha, S. Suarez, D. Connell", title: "Weak Convergence Methods for Partial Differential Equations", venue: "UF Directed Reading Program Mathematics Symposium, Gainesville, FL" },
   { date: "May 2026", authors: "S. Ojha, R. Dadlani, R. Divan, G. Ratcliff", title: "Radiation Transport Equation", venue: "TAMU Undergraduate Summer School in Modeling and Simulating with PDEs, College Station, TX" },
   { date: "Apr 2026", authors: "S. Ojha & T. Stepien", title: "Mathematical Modeling of Intercalation in Two Cell Layers During the Gastrulation Stage of Embryonic Development", venue: "Undergraduate Mathematics Research Symposium, Gainesville, FL" },
   { date: "Apr 2026", authors: "S. Ojha, P. Kulkarni, S. Patel", title: "Modeling AI Model Collapse Using Markov Chains and Layered Discrete Distributions", venue: "Undergraduate Mathematics Research Symposium, Gainesville, FL" },
@@ -32,6 +33,7 @@ export const TALKS = [
 ];
 
 export const POSTERS = [
+  { date: "Nov 2026", authors: "S. Ojha, R. Dadlani, R. Divan, G. Ratcliff", title: "Radiation Transport Equation", venue: "UIC Undergraduate Mathematics Symposium, Chicago, IL" },
   { date: "Nov 2026", authors: "S. Ojha, P. Kulkarni, S. Patel, D. Lizdas, S. Mesber, S. Lampotang, C. Dooley", title: "Efficacy of a Mixed-Reality Simulator for Ultrasound-Guided Infant Caudal Epidural Block Training: Study Design", venue: "UF Fall Undergraduate Research Symposium, Gainesville, FL" },
   { date: "Oct 2026", authors: "S. Ojha, P. Kulkarni, S. Patel, D. Lizdas, S. Mesber, S. Lampotang, C. Dooley", title: "Efficacy of a Mixed-Reality Simulator for Ultrasound-Guided Infant Caudal Epidural Block Training: Study Design", venue: "Biomedical Engineering Society Annual Meeting, Orlando, FL" },
   { date: "Oct 2026", authors: "S. Ojha, T.-N. Nguyen, S. Shreekanth, R. Shah", title: "Evaluation of a Kidney Transplant Model for Educational Skill Development", venue: "Biomedical Engineering Society Annual Meeting, Orlando, FL" },
@@ -39,7 +41,7 @@ export const POSTERS = [
   { date: "Mar 2026", authors: "S. Ojha & T. Stepien", title: "Mathematical Modeling of Intercalation in Two Cell Layers During the Gastrulation Stage of Embryonic Development", venue: "Infectious Diseases and Economic Growth Workshop, Gainesville, FL" },
   { date: "Jul 2025", authors: "S. Ojha, J. Gill, L. Zhu", title: "Modeling Cell Migration with a Linearized Lattice-Boltzmann Immersed-Boundary Method", venue: "Indiana University Indianapolis Summer Research Symposium, Indianapolis, IN" },
   { date: "Apr 2025", authors: "S. Ojha, H. Kennedy, U. Sharma, J. Labasbas", title: "Synthetic MRI Generation for Deep Brain Stimulation Preoperative Planning", venue: "Yale Undergraduate Research Conference, New Haven, CT" },
-  { date: "Nov 2023", authors: "S. Ojha, H. Kennedy, U. Sharma, A. Jain, A. Kelegama", title: "3D Modeling of Berlin Heart Devices: Mitigating Pediatric Anxiety in Congenital Heart Disease", venue: "UF Undergraduate Research Symposium, Center for Undergraduate Research, Gainesville, FL" },
+  { date: "Nov 2023", authors: "S. Ojha, H. Kennedy, U. Sharma, A. Jain, A. Kelegama", title: "3D Modeling of Berlin Heart Devices: Mitigating Pediatric Anxiety in Congenital Heart Disease", venue: "UF Fall Undergraduate Research Symposium, Center for Undergraduate Research, Gainesville, FL" },
 ];
 
 export const HONORS = [
@@ -52,7 +54,7 @@ export const HONORS = [
   { what: "Math Circle Undergraduate Leader", who: "UF Mathematics", when: "Spring 2026" },
   { what: "Successful Participant, MCM/ICM", who: "COMAP", when: "2024, 2025, 2026" },
   { what: "Successful Participant, SCUDEM", who: "SIMIODE", when: "Fall 2024" },
-  { what: "BME Learning Assistant Program", who: "UF College of Engineering", when: "Fall 2024, Fall 2025", note: "$1,500 total" },
+  { what: "BME Learning Assistant Program", who: "UF College of Engineering", when: "Spring 2025, Spring 2026", note: "$1,500 total" },
   { what: "Dean's List", who: "College of Engineering (7 terms) and CLAS (3 terms)", when: "2023–2026" },
 ];
 
@@ -61,12 +63,12 @@ export const TRAINING = [
     title: "Directed Reading Program: weak convergence methods for nonlinear PDEs",
     where: "UF Mathematics",
     when: "Aug 2026 – present",
-    text: "Reading Evans's Weak Convergence Methods for Nonlinear Partial Differential Equations, with a weekly guided session led by a PhD candidate. A presentation is planned for late November 2026.",
+    text: "Reading Evans's Weak Convergence Methods for Nonlinear Partial Differential Equations, with a weekly guided session led by Dylan Connell, a PhD candidate. Presented at the UF DRP Mathematics Symposium in November 2026.",
   },
   {
     title: "Preliminary Arizona Winter School (PAWS)",
     where: "University of Arizona",
-    when: "Sep 2026 – present",
+    when: "Sep – Nov 2026",
     text: "Lectures on quaternion algebras by Dr. Jen Berg, with weekly problem sets worked in collaborative sessions.",
   },
   {
@@ -99,8 +101,8 @@ export const TRAINING = [
 
 export const SKILLS = [
   { group: "Mathematical & statistical methods", items: ["Continuum mechanics", "PDE modeling", "Finite element & finite difference methods", "Lattice Boltzmann–immersed boundary", "Approximate Bayesian Computation (ABC-SMC)", "Global sensitivity analysis", "Markov chains", "Monte Carlo methods", "Agent-based modeling", "ANOVA"] },
-  { group: "Programming", items: ["Python", "MATLAB", "R", "Java", "React", "LaTeX / Markdown"] },
-  { group: "Scientific computing", items: ["HiPerGator (HPC)", "UQLab", "NetLogo", "BindCraft", "AlphaFold", "ImageJ"] },
+  { group: "Programming", items: ["Python", "MATLAB", "R", "Java", "React", "LaTeX / Markdown", "SQL (in progress)"] },
+  { group: "Scientific computing", items: ["Linux / HPC (HiPerGator)", "UQLab", "NetLogo", "BindCraft", "AlphaFold", "ImageJ"] },
   { group: "Engineering", items: ["Fusion 360", "Arduino", "KiCad", "3D printing"] },
   { group: "Wet lab", items: ["Cell culture", "Protein purification", "Bacterial transformation", "Overexpression", "SDS-PAGE"] },
   { group: "Clinical", items: ["American Red Cross Basic Life Support"] },
